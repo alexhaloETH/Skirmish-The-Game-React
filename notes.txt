@@ -1,0 +1,11 @@
+when a new instance of the game is started and the wallet was previously connected, the react code connects to the argent wallet
+but not the unity game
+
+silentconnect() finishes before the game is even ready, possible solution is call a function at game init from unity it self
+-----  ISSUE ABOVE FIXED THE FUNCTINO JUST DOES NOT CALL AT THE RIGHT TIME FOR SOME REASON ----
+
+
+issue on start of new instance straight after load there seems to be a call to CheckBalanceERC20 but ofcourse the wallet isnt connecte
+
+
+need ot divide the current balance by the const tokenOffset

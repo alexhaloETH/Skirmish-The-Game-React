@@ -1,0 +1,164 @@
+
+
+
+
+  // enable this to allow connection to a wallet from the start of the website, this goes int he app.comp.tsx
+  
+  // useEffect(() => {
+  //   const handler = async () => {
+  //     const wallet = await silentConnectWallet()
+  //     setAddress(wallet?.selectedAddress)
+  //     setChain(chainId())
+
+
+
+  //     console.log("when is this called");
+      
+
+  //     setnetwork(networkId())
+  //     setConnected(!!wallet?.isConnected)
+  //   }
+
+  //     ; (async () => {
+  //       await handler()
+  //       addWalletChangeListener(handler)
+  //     })()
+
+  //   return () => {
+  //     removeWalletChangeListener(handler)
+  //   }
+  // }, [])
+
+
+
+
+
+
+// enable this to allow the wallet to connect from the start of the website, this goes in the wallet service
+
+// export const silentConnectWallet = async () => {
+//   const windowStarknet = await connect({ showList: false })
+//   if (!windowStarknet?.isConnected) {
+//     await windowStarknet?.enable({ showModal: false })
+//   }
+//   console.log("idaiadidaidaijidaiadio");
+  
+//   return windowStarknet
+// }
+
+
+
+
+
+
+
+// called eveyrtime the state of isConnected changes, usefull for monitoring changes in values
+
+ useEffect(() => {
+    console.log('useEffect ran. count is: ', isConnected);
+  }, [isConnected]);
+
+
+
+
+
+
+
+somthing to do with json to untiy
+   // const somthing = JSON.stringify([{ contractAddress: [], entrypoint: [],calldata:[] }])
+
+    // const soemthingagaain = JSON.parse(somthing)
+
+
+    // var realmId = "10"
+    // var encryptedData = "2020"
+
+    // soemthingagaain.contractAddress = "0x0218f28664c5a5d896f97ab4acacfb7c1be8c8d7e272a54a6bc11ac9d859aa36"
+    // soemthingagaain.entrypoint = "SetDeckData"
+    // soemthingagaain.calldata = [realmId, encryptedData]
+    // console.log(soemthingagaain);
+    
+    
+    //sendMessage("--- UI", "CallTest", JSON.stringify(soemthingagaain))
+
+
+
+
+
+
+somthint to do with the encryptino
+
+var key = [ 1, 1, 1, 4, 1, 1, 1,6, 1, 2, 7, 2, 3, 1, 2, 1 ];
+    console.log("\n\n\n");
+    var unityData = "1-2-3-4-2-3-1-6-1-2-7-2-3-1-2-0"  // this is the unity data we take in 
+
+    const arrayUnityData = unityData.split("-"); 
+    console.log(arrayUnityData + " this is the array with all the data from unity");     // we make an array fo it so we can devide everything
+    
+
+    var buffer = new ArrayBuffer(16)
+    console.log(buffer + " this is the buffer --------------");   // create a new bugffer where we store all the data 
+
+
+    let view = new Uint8Array(buffer);
+    console.log(view + " this is in the view ");    // store everything in the buffer
+
+    for (let step = 0; step < 16; step++) {
+      view[step] = parseInt(arrayUnityData[step]);
+    }
+    console.log(view + " this is the new view var ");  // this array stores the data in the wanted format
+
+
+
+    //1-1-1-4-1-1-1-6-1-2-7-2-3-1-2-1
+        // get the key of the player, the same thing as the shits above
+    console.log("here we make our key " + key);
+    
+
+    var textBytes = Aes_js.utils.utf8.toBytes(view);    //turn that array into bytes
+    console.log("turn the data into bytes " + textBytes);
+    
+    var compressed = SnappyJS.compress(view)        // compress the bytes
+    console.log(compressed + "then we compress it");
+
+    var aesCtr = new Aes_js.ModeOfOperation.ctr(key);
+    var encryptedBytes = aesCtr.encrypt(compressed);
+    console.log("this should be the data all encrypted "  + encryptedBytes );     // encrypt it
+
+    var felt = stringToFelt(encryptedBytes);
+    console.log("this is in felt format "  + felt );    // store it as a felt    // this is an hex that is given to cairo 
+    
+
+
+
+
+
+
+    
+    const encryptedData = BigInt("14464597264280611871133618800053182896885084")  
+    // turned into decimal
+    console.log(encryptedData);
+
+
+    var hexString : string = encryptedData.toString(16);
+    console.log(hexString); 
+
+    // var felt = felt.substring(2)
+
+    var somthing = hexToBytes(hexString)
+    console.log(somthing);
+    
+
+    aesCtr = new Aes_js.ModeOfOperation.ctr(key);
+    var decryptedBytes = aesCtr.decrypt(somthing);
+    console.log("descrypted bytes " + decryptedBytes);
+    
+ 
+// Convert our bytes back into text
+    var decryptedText = Aes_js.utils.utf8.fromBytes(decryptedBytes);
+    console.log(decryptedText + " still compressed");
+
+
+    var uncompressed = SnappyJS.uncompress( Aes_js.utils.utf8.toBytes( decryptedText))
+    console.log(uncompressed + " uncompresses    ----------------");
+
